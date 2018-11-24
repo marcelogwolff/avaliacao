@@ -1,0 +1,105 @@
+<html ng-app="cadastroClientes">
+<head>
+	<meta charset="UTF-8">
+	<title>Cadastro de clientes</title>
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+	<link href="assets/css/style.css" rel="stylesheet">
+ 	<script src="lib/angular/angular.js"></script>
+	<script src="lib/angular/angular-messages.js"></script>
+	<script src="lib/js/cliente.js"></script>
+</head>
+<body ng-controller="cadastroClientesCtrl">
+	<div class="jumbotron">
+		<h3>{{app}}</h3>
+		{{message}}
+		<hr/>
+		<form name="contatoForm">
+			<input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10"/>
+			<input class="form-control" type="text" ng-model="contato.cpf" name="cpf" placeholder="Cpf" ng-required="true" ng-pattern="/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$/"/>
+			<input class="form-control" type="text" ng-model="contato.idade" name="idade" placeholder="Idade" ng-required="true"/>
+			<input class="form-control" type="text" ng-model="contato.sexo" name="sexo" placeholder="Sexo" ng-required="true"/>
+			<input class="form-control" type="text" ng-model="contato.estadoCivil" name="estadoCivil" placeholder="Estado Civil" ng-required="true"/>
+<!-- 			<input class="form-control" type="text" ng-model="contato.estado" name="estado" placeholder="Estado" ng-required="true"/> -->
+			<select class="form-control" ng-model="contato.estado" name="estado" ng-required="true">
+				<option value="" disabled selected>Estado</option>
+				<option value="AC">Acre</option>
+				<option value="AL">Alagoas</option>
+				<option value="AP">Amapá</option>
+				<option value="AM">Amazonas</option>
+				<option value="BA">Bahia</option>
+				<option value="CE">Ceará</option>
+				<option value="DF">Distrito Federal</option>
+				<option value="ES">Espírito Santo</option>
+				<option value="GO">Goiás</option>
+				<option value="MA">Maranhão</option>
+				<option value="MT">Mato Grosso</option>
+				<option value="MS">Mato Grosso do Sul</option>
+				<option value="MG">Minas Gerais</option>
+				<option value="PA">Pará</option>
+				<option value="PB">Paraíba</option>
+				<option value="PR">Paraná</option>
+				<option value="PE">Pernambuco</option>
+				<option value="PI">Piauí</option>
+				<option value="RJ">Rio de Janeiro</option>
+				<option value="RN">Rio Grande do Norte</option>
+				<option value="RS">Rio Grande do Sul</option>
+				<option value="RO">Rondônia</option>
+				<option value="RR">Roraima</option>
+				<option value="SC">Santa Catarina</option>
+				<option value="SP">São Paulo</option>
+				<option value="SE">Sergipe</option>
+				<option value="TO">Tocantins</option>
+			</select>
+			<input class="form-control" type="text" ng-model="contato.dependentes" name="dependentes" placeholder="Número de Dependentes" ng-required="true"/>
+			<input class="form-control" type="text" ng-model="contato.renda" name="renda" placeholder="Renda" ng-required="true"/>
+		</form>
+
+		<div ng-show="contatoForm.nome.$dirty" ng-messages="contatoForm.nome.$error">
+			<div ng-message="required" class="alert alert-danger">
+				Por favor, preencha o campo nome!
+			</div>
+			<div ng-message="minlength" class="alert alert-danger">
+				O campo nome deve ter no mínimo 10 caracteres.
+			</div>
+		</div>
+
+		<div ng-show="contatoForm.cpf.$error.pattern" class="alert alert-danger">
+			O CPF deve ter o formato 000.000.000-00.
+		</div>
+		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Cadastro</button>
+		<button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar Cadastro</button>
+	</div>
+	
+	<br/>
+	<div class="jumbotron2">
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?"/>
+		<table ng-show="contatos.length > 0" class="table table-striped">
+			<tr>
+				<th></th>
+				<th><a href="" ng-click="ordenarPor('id')">Identificador</a></th>
+				<th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+				<th><a href="" ng-click="ordenarPor('cpf')">CPF</a></th>
+				<th><a href="" ng-click="ordenarPor('idade')">Idade</a></th>
+				<th><a href="" ng-click="ordenarPor('sexo')">Sexo</a></th>
+				<th><a href="" ng-click="ordenarPor('estadoCivil')">Estado civil</a></th>
+				<th><a href="" ng-click="ordenarPor('estado')">Estado</a></th>
+				<th><a href="" ng-click="ordenarPor('dependentes')">Dependentes</a></th>
+				<th><a href="" ng-click="ordenarPor('renda')">Renda</a></th>
+			</tr>
+			<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+				<td><input type="checkbox" ng-model="contato.selecionado"/></td>
+				<td>{{contato.id}}</td>
+				<td>{{contato.nome}}</td>
+				<td>{{contato.cpf}}</td>
+				<td>{{contato.idade}}</td>
+				<td>{{contato.sexo}}</td>
+				<td>{{contato.estadoCivil}}</td>
+				<td>{{contato.estado}}</td>
+				<td>{{contato.dependentes}}</td>
+				<td>{{contato.renda}}</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
+
